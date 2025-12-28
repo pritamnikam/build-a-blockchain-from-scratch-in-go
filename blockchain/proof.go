@@ -1,3 +1,7 @@
+// Package blockchain contains a compact, educational Proof of Work example
+// and supporting types used by the demo application. The PoW implementation
+// here is intentionally simple and uses MD5 for hashing to keep iteration
+// times short for learning — do not use MD5 in production.
 package blockchain
 
 import (

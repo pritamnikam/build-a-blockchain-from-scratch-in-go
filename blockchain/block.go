@@ -1,3 +1,6 @@
+// Package blockchain provides a minimal, educational implementation of a
+// blockchain for learning purposes. It includes simple block structures,
+// proof-of-work mining and transaction support used by the demo.
 package blockchain
 
 import (

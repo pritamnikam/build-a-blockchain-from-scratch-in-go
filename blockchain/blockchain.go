@@ -1,9 +1,11 @@
+// Package blockchain contains a minimal, educational blockchain
+// implementation (blocks, chain, proof-of-work and wallets).
 package blockchain
 
-// BlockChain is a very small in-memory blockchain container that stores
-// an ordered slice of block pointers. This implementation is intentionally
-// minimal for learning purposes.
-
+// Transaction represents a simple transfer of value between two parties.
+// Fields are kept simple for educational purposes: Sender and Receiver are
+// string identifiers, Amount is the transferred value and Coinbase marks
+// miner/coinbase transactions.
 type Transaction struct {
 	Sender   string
 	Receiver string
@@ -11,6 +13,9 @@ type Transaction struct {
 	Coinbase bool
 }
 
+// BlockChain is a very small in-memory blockchain container that stores
+// an ordered slice of block pointers. This implementation is intentionally
+// minimal for learning purposes.
 type BlockChain struct {
 	Blocks []*Block
 }

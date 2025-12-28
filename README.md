@@ -28,23 +28,24 @@ A minimal, educational implementation of a blockchain with Proof of Work consens
 - Go 1.16 or higher
 - Basic understanding of blockchain concepts
 
-## Getting Started
+[GETTING STARTED]
 
-### Clone and Setup
+### Repository
+
+Clone the repository:
 
 ```bash
-cd c:\WORKSPACE\01_EDUCATIVE\03_PROJECTS\05-build-a-blockchain-from-scratch-in-go
-go mod init github.com/your-username/blockchain
+git clone https://github.com/pritamnikam/build-a-blockchain-from-scratch-in-go.git
+cd build-a-blockchain-from-scratch-in-go
 ```
 
-### Run the Demo
+### Run the demo
 
-```bash
+```powershell
 go run main.go
 ```
 
-**Expected Output:**
-```
+Expected: the program will create wallets, sign a transaction, add a block and print the chain. Example output (truncated):
 Mining block: First Block - Transaction Data
 Found hash: 0000abc...
 Nonce: 1234
