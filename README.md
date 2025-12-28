@@ -6,21 +6,29 @@ A minimal, educational implementation of a blockchain with Proof of Work consens
 
 - **Blockchain Structure**: Immutable chain of cryptographically linked blocks
 - **Proof of Work (PoW)**: Mining mechanism requiring computational effort (difficulty-based hashing)
-- **SHA-256 Hashing**: Industry-standard cryptographic hash function for block security
-- **Chain Validation**: Verify blockchain integrity and detect tampering
+- **Transactions & Blocks**: Support for multiple transactions per block with coinbase rewards
+- **Wallet System**: RSA-based wallet generation for key management
+- **Digital Signatures**: Sign and verify transactions using cryptographic keys
+- **Unit Tests**: Comprehensive test coverage for PoW, blocks and wallet functionality
+- **MD5 Hashing**: Educational hashing (production should use SHA-256)
 
 ## Project Structure
 
 ```
 .
 ├── blockchain/
-│   ├── block.go          # Block structure and hashing logic
-│   ├── blockchain.go     # Blockchain management and validation
-│   ├── proof.go          # Proof of Work mining implementation
-│   └── wallet.go         # (Future) Wallet and transaction support
-├── main.go               # Demo application
-├── go.mod                # Go module definition
-└── README.md             # This file
+│   ├── block.go              # Block structure with transactions and PoW mining
+│   ├── block_test.go         # Unit tests for block creation and PoW validation
+│   ├── blockchain.go         # Blockchain chain management with transactions
+│   ├── proof.go              # Proof of Work algorithm implementation
+│   ├── proof_test.go         # Unit tests for mining and validation
+│   ├── wallet.go             # RSA wallet, signing and verification
+│   └── wallet_test.go        # Unit tests for transaction signing
+├── main.go                   # Full demo with wallets and transactions
+├── definitions.md            # Glossary of blockchain concepts
+├── go.mod                    # Go module definition (github.com/pritamnikam/...)
+├── task-00.md → task-15.md   # Guided exercise tasks
+└── README.md                 # This file
 ```
 
 ## Definitions & Glossary
@@ -30,85 +38,125 @@ See the comprehensive glossary of blockchain concepts with code examples and tas
 
 ## Prerequisites
 
-- Go 1.16 or higher
-- Basic understanding of blockchain concepts
+- Go 1.20 or higher
+- Basic understanding of Go and blockchain concepts
 
-[GETTING STARTED]
+## Getting Started
 
-### Repository
-
-Clone the repository:
+### Clone the Repository
 
 ```bash
 git clone https://github.com/pritamnikam/build-a-blockchain-from-scratch-in-go.git
 cd build-a-blockchain-from-scratch-in-go
 ```
 
-### Run the demo
+### Run the Demo
+
+The demo demonstrates:
+1. Creating wallets for Alice and Bob
+2. Signing a transaction with Alice's private key
+3. Verifying the transaction with Alice's public key
+4. Adding a block with the transaction to the blockchain
+5. Validating PoW for each block
 
 ```powershell
 go run main.go
 ```
 
-Expected: the program will create wallets, sign a transaction, add a block and print the chain. Example output (truncated):
-Mining block: First Block - Transaction Data
-Found hash: 0000abc...
-Nonce: 1234
-
-Mining block: Second Block - More Transactions
-Found hash: 0000def...
-Nonce: 5678
-
-=== Blockchain ===
-
-Block #0
-Hash: 0000123...
-Previous Hash: 
-Data: Genesis Block
-Nonce: 89
-
-Block #1
-Hash: 0000abc...
-Previous Hash: 0000123...
-Data: First Block - Transaction Data
-Nonce: 1234
+**Expected Output:**
 ```
+Alice's wallet created successfully
+Bob's wallet created successfully
+Alice to Bob Transaction created successfully
+Transaction Verified Successfully
+<mining output with hash attempts>
+
+Previous hash: 
+Data: Genesis
+Hash: 64572909aa4583d58dfe87f6b89d667e
+IsValidPoW: true
+
+Transactions:
+Sender: Coinbase
+Receiver: Genesis
+Amount: 0.000000
+Coinbase: true
+
+Previous hash: 64572909aa4583d58dfe87f6b89d667e
+Data: Block 1
+Hash: b54f09452958fcf772aeb41c2f7e6cda
+IsValidPoW: true
+
+Transactions:
+Sender: Coinbase
+Receiver: Alice
+Amount: 10.000000
+Coinbase: true
+
+Sender: <Alice's public key>
+Receiver: <Bob's public key>
+Amount: 5.000000
+Coinbase: false
+```
+
+### Run Tests
+
+```powershell
+go test ./...
+```
+
+This runs unit tests for:
+- Block creation and PoW mining
+- Transaction signing and verification
+- PoW validation
 
 ## Key Concepts
 
+See [definitions.md](definitions.md) for a comprehensive glossary with diagrams, code examples and task references.
+
 ### Block
 A block contains:
-- **Hash**: SHA-256 hash of the block's data, previous hash, and nonce
-- **Data**: Transaction payload
-- **PrevHash**: Hash of the previous block (creates the chain link)
-- **Nonce**: Number used in Proof of Work mining
+- **Hash**: MD5 digest of the block's data, previous hash, and nonce
+- **Data**: Block identifier/payload
+- **PrevHash**: Hash of the previous block (chain link)
+- **Nonce**: Number found during PoW mining
+- **Transactions**: List of transactions in the block
 
 ### Proof of Work
-Mining involves finding a nonce such that the block's hash has a required number of leading zeros (controlled by `Difficulty`).
+Mining finds a nonce such that the block's hash meets a difficulty target (specified number of leading zero bits).
 
-- **Difficulty = 4**: Hash must start with 4 zeros (example: `0000abc123...`)
-- Higher difficulty = more computational work required
-- Increase `Difficulty` in `blockchain/block.go` for harder mining
+- **Difficulty = 10**: Hash must be numerically less than a target threshold
+- Higher difficulty = more hashing iterations required
+- Adjust `Difficulty` constant in [blockchain/proof.go](blockchain/proof.go) for testing
 
-### Chain Validation
-The `IsValid()` method verifies:
-1. Each block's hash is correctly computed
-2. Each block's `PrevHash` matches the previous block's hash
-3. No tampering has occurred
+### Transactions & Wallets
+- **Transaction**: Transfer record (Sender, Receiver, Amount, Coinbase flag)
+- **Coinbase Transaction**: Miner reward (first transaction in each block)
+- **Wallet**: RSA keypair for signing/verifying transactions
+- **Digital Signature**: Proof of authorization (sender's private key signs, public key verifies)
 
-## Extending the Blockchain
+## Possible Extensions
 
-### Add Transactions
-Modify the `Block` struct to include a `Transactions` slice instead of a single `Data` field.
+### Persistence
+Store blocks in a database (SQLite, LevelDB, RocksDB) instead of in-memory storage.
 
-### Add a Wallet System
-Implement cryptographic signing and verification in `blockchain/wallet.go` for transaction validation.
+### UTXO Model
+Implement Unspent Transaction Output (UTXO) model for state management.
 
-### Add Persistence
-Use a database (SQLite, LevelDB) to persist blocks to disk.
+### Account Model
+Alternatively, use an account-based model (like Ethereum) for balance tracking.
 
-### Implement P2P Networking
-Add network functionality to sync blocks across multiple nodes.
+### P2P Networking
+Add network layer for multi-node blockchain synchronization and consensus.
+
+### Merkle Tree
+Include Merkle root of transactions for efficient transaction verification.
+
+### Gas & Fees
+Implement transaction fees and computational cost (gas) models.
+
+### Smart Contracts
+Add simple script execution support for programmable transactions.
 
 ## Learning Resources
 
