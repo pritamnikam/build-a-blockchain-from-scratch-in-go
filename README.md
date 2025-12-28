@@ -23,6 +23,11 @@ A minimal, educational implementation of a blockchain with Proof of Work consens
 └── README.md             # This file
 ```
 
+## Definitions & Glossary
+
+See the comprehensive glossary of blockchain concepts with code examples and task references in [definitions.md](definitions.md). Covers all tasks from task-00.md through task-15.md.
+
+
 ## Prerequisites
 
 - Go 1.16 or higher
